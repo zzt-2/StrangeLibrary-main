@@ -45,7 +45,7 @@ services:
       - service
     container_name: user-service
     restart: always
-    build: ./backend-micro/user-service
+    build: ./backend-micro/User-Service
     depends_on:
       - db
       - service-discovery
