@@ -1,5 +1,5 @@
 # Specify base image
-FROM fabric8/java-alpine-openjdk8-jdk
+FROM docker.1panel.live/fabric8/java-alpine-openjdk8-jdk
 # Maintainer information
 LABEL maintainer="haiweiwang1109@163.com"
 COPY target/*.jar /app/app.jar 

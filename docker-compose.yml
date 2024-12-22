@@ -7,7 +7,7 @@ services:
     privileged: true
     networks:
       - service
-    image: enmotech/opengauss-lite:latest
+    image: docker.1panel.live/enmotech/opengauss-lite:latest
     restart: always
     volumes:
       - ./database/:/var/lib/opengauss
