@@ -73,11 +73,11 @@ public class FineService {
                 log.setUsername(fine.getUsername());
                 log.setPrice(fine.getPrice());
                 log.setNote("支付成功，恢复信用");
-                restTemplate.put("http://localhost:9099/api/logger/log", log);
+                restTemplate.put("http://logger-service:9094/api/logger/log", log);
                 map.setMessage("支付成功");
             }
             // 恢复用户信用
-            restTemplate.put("http://localhost:9090/api/credit/" + username + "/" + "100", null);
+            restTemplate.put("http://user-service:9090/api/credit/" + username + "/" + "100", null);
             // 清除罚单
             fineRepository.deleteAll(fines);
         } catch (Exception e) {
@@ -89,7 +89,7 @@ public class FineService {
                 log.setTime(now);
                 log.setUsername(fine.getUsername());
                 log.setPrice(fine.getPrice());
-                restTemplate.put("http://localhost:9099/api/logger/log", log);
+                restTemplate.put("http://logger-service:9094/api/logger/log", log);
                 map.setMessage("支付失败，余额不足");
             }
         }

@@ -194,7 +194,7 @@ class BookServiceApplicationTests {
         ResponseEntity<User> responseEntity = ResponseEntity.ok(admin);
 
         System.out.println(ResponseEntity.ok(admin).getBody());
-        Mockito.when(restTemplate.postForEntity("http://localhost:9090/api/session/" + copyAddRequest.getSession(), null, User.class))
+        Mockito.when(restTemplate.postForEntity("http://user-service:9090/api/session/" + copyAddRequest.getSession(), null, User.class))
                 .thenReturn(responseEntity);
 
         HashMap<String, Object> map = copyService.add(copyAddRequest).getMap();
@@ -209,7 +209,7 @@ class BookServiceApplicationTests {
         admin.setPermission("超级管理员");
         ResponseEntity<User> responseEntity = ResponseEntity.ok(admin);
 
-        Mockito.when(restTemplate.postForEntity("http://localhost:9090/api/session/" + copyAddRequest.getSession(), null, User.class))
+        Mockito.when(restTemplate.postForEntity("http://user-service:9090/api/session/" + copyAddRequest.getSession(), null, User.class))
                 .thenReturn(responseEntity);
 
         Mockito.when(bookRepository.findBookByISBN(mockISBN)).thenReturn(null);
@@ -232,7 +232,7 @@ class BookServiceApplicationTests {
         copyAddRequest.setNumber(3);
 
         ResponseEntity<User> responseEntity = ResponseEntity.ok(admin);
-        Mockito.when(restTemplate.postForEntity("http://localhost:9090/api/session/" + copyAddRequest.getSession(), null, User.class))
+        Mockito.when(restTemplate.postForEntity("http://user-service:9090/api/session/" + copyAddRequest.getSession(), null, User.class))
                 .thenReturn(responseEntity);
         Mockito.when(bookRepository.findBookByISBN(null)).thenReturn(book);
         Mockito.when(copyRepository.countCopiesByISBN(null)).thenReturn(3);

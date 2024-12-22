@@ -38,7 +38,7 @@ public class CopyService {
         User admin = null;
         try {
             // 接口调用失败和session找不到目标的结果都是返回null给admin赋值
-            ResponseEntity<User> responseEntity = restTemplate.postForEntity("http://localhost:9090/api/session/" + request.getSession(), null, User.class);
+            ResponseEntity<User> responseEntity = restTemplate.postForEntity("http://user-service:9090/api/session/" + request.getSession(), null, User.class);
             admin = responseEntity.getBody();
         } catch (Exception e) {
             System.out.println(e.getMessage());

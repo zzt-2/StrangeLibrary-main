@@ -6,18 +6,16 @@ eureka:
     healthcheck:
       enabled: true
     serviceUrl:
-      defaultZone: http://user:123456@${EUREKA_HOST:localhost}:8080/eureka/      #服务注册中信地址，含有BASIC认证的用户名和密码
+      defaultZone: http://user:123456@${EUREKA_HOST:localhost}:8080/eureka/ #服务注册中信地址，含有BASIC认证的用户名和密码
   instance:
-    prefer-ip-address: true         #将IP注册到服务注册中心
+    prefer-ip-address: true #将IP注册到服务注册中心
 
 #放开所有节点
 management:
   endpoints:
     web:
       exposure:
-        include: '*'
-
-
+        include: "*"
 
 spring:
   application:
@@ -25,19 +23,19 @@ spring:
   profiles:
     active: test#logging.level.root = DEBUG;
   datasource:
-    url: jdbc:mysql://${DB_URL:localhost:3306/book}?serverTimezone=UTC # 修改:3306前的mysql为localhost可本地测试
-    username: root
-    password: password
-    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:postgresql://${DB_URL:localhost:5432/book}?serverTimezone=UTC # 修改:3306前的mysql为localhost可本地测试
+    username: gaussdb
+    password: ${DB_PASSWORD:password}
+    driver-class-name: org.postgresql.Driver
     initialization-mode: always
   jpa:
     properties:
       hibernate:
-        dialect: org.hibernate.dialect.MySQL8Dialect
+        dialect: org.hibernate.dialect.PostgreSQLDialect
     hibernate:
       ddl-auto: update
     show-sql: true
-    database: mysql
+    database: POSTGRESQL
   servlet:
     multipart:
       max-file-size: 5MB

@@ -49,7 +49,7 @@ class CommentServiceApplicationTests {
     @Test
     void getCommentsWithoutSession() {
         ResponseEntity<User> responseEntity = ResponseEntity.ok(null);
-        Mockito.when(restTemplate.postForEntity("http://localhost:9090/api/session/" + mockSession, null, User.class))
+        Mockito.when(restTemplate.postForEntity("http://user-service:9090/api/session/" + mockSession, null, User.class))
                 .thenReturn(responseEntity);
         HashMap<String, Object> map = commentService.getCommentsBySession(mockSession).getMap();
         assertEquals("查看评论需要登录",map.get("message"));
@@ -72,7 +72,7 @@ class CommentServiceApplicationTests {
         List<Comment> comments = new ArrayList<>();
         comments.add(comment);
 
-        Mockito.when(restTemplate.postForEntity("http://localhost:9090/api/session/" + mockSession, null, User.class))
+        Mockito.when(restTemplate.postForEntity("http://user-service:9090/api/session/" + mockSession, null, User.class))
                 .thenReturn(responseEntity);
 
         Mockito.when(commentRepository.findAllByUsername(mockUsername)).thenReturn(comments);
@@ -134,7 +134,7 @@ class CommentServiceApplicationTests {
         comment.setIsbn(mockISBN);
         comment.setComment(mockComment);
 
-        Mockito.when(restTemplate.postForEntity("http://localhost:9090/api/session/" + mockSession, null, User.class))
+        Mockito.when(restTemplate.postForEntity("http://user-service:9090/api/session/" + mockSession, null, User.class))
                 .thenReturn(responseEntity);
         Mockito.when(commentRepository.findCommentByIdAndUsername(mockId,mockUsername))
                 .thenReturn(comment);
@@ -167,7 +167,7 @@ class CommentServiceApplicationTests {
         comment.setIsbn(mockISBN);
         comment.setComment(mockComment);
 
-        Mockito.when(restTemplate.postForEntity("http://localhost:9090/api/session/" + mockSession, null, User.class))
+        Mockito.when(restTemplate.postForEntity("http://user-service:9090/api/session/" + mockSession, null, User.class))
                 .thenReturn(responseEntity);
         Mockito.when(commentRepository.findCommentById(mockId))
                 .thenReturn(comment);
@@ -197,7 +197,7 @@ class CommentServiceApplicationTests {
         comment.setIsbn(mockISBN);
         comment.setComment(mockComment);
 
-        Mockito.when(restTemplate.postForEntity("http://localhost:9090/api/session/" + mockSession, null, User.class))
+        Mockito.when(restTemplate.postForEntity("http://user-service:9090/api/session/" + mockSession, null, User.class))
                 .thenReturn(responseEntity);
         Mockito.when(commentRepository.findCommentById(mockId))
                 .thenReturn(comment);
@@ -230,7 +230,7 @@ class CommentServiceApplicationTests {
         comment.setIsbn(mockISBN);
         comment.setComment(mockComment);
 
-        Mockito.when(restTemplate.postForEntity("http://localhost:9090/api/session/" + mockSession, null, User.class))
+        Mockito.when(restTemplate.postForEntity("http://user-service:9090/api/session/" + mockSession, null, User.class))
                 .thenReturn(responseEntity);
         Mockito.when(commentRepository.findCommentById(mockId))
                 .thenReturn(comment);
@@ -260,7 +260,7 @@ class CommentServiceApplicationTests {
         comment.setIsbn(mockISBN);
         comment.setComment(mockComment);
 
-        Mockito.when(restTemplate.postForEntity("http://localhost:9090/api/session/" + mockSession, null, User.class))
+        Mockito.when(restTemplate.postForEntity("http://user-service:9090/api/session/" + mockSession, null, User.class))
                 .thenReturn(responseEntity);
         Mockito.when(commentRepository.findCommentById(mockId))
                 .thenReturn(comment);
@@ -307,7 +307,7 @@ class CommentServiceApplicationTests {
         user.setPermission("管理员");
         user.setUsername(mockUsername);
         ResponseEntity<User> responseEntity = ResponseEntity.ok(user);
-        Mockito.when(restTemplate.postForEntity("http://localhost:9090/api/session/" + mockSession, null, User.class))
+        Mockito.when(restTemplate.postForEntity("http://user-service:9090/api/session/" + mockSession, null, User.class))
                 .thenReturn(responseEntity);
         Mockito.when(commentRepository.existsByIdAndStatus(request.getCommentId(), "已评论")).thenReturn(true);
         Mockito.when(commentRepository.findCommentById(request.getCommentId())).thenReturn(comment);
@@ -331,7 +331,7 @@ class CommentServiceApplicationTests {
         Discussion discussion=new Discussion();
         discussion.setId(1);
         discussion.setUsername(mockUsername);
-        Mockito.when(restTemplate.postForEntity("http://localhost:9090/api/session/" + mockSession, null, User.class))
+        Mockito.when(restTemplate.postForEntity("http://user-service:9090/api/session/" + mockSession, null, User.class))
                 .thenReturn(responseEntity);
         HashMap<String, Object> map = discussionService.delete(request).getMap();
         assertEquals("讨论删除成功",map.get("message"));

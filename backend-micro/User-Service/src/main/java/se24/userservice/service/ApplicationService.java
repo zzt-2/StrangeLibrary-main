@@ -58,7 +58,7 @@ public class ApplicationService {
         log.setPrice(0);
         log.setTime(now);
         log.setNote("申请理由:" + request.getReason());
-        restTemplate.put("http://localhost:9099/api/logger/log", log);
+        restTemplate.put("http://logger-service:9094/api/logger/log", log);
 
         ReturnMap map = new ReturnMap();
         map.setRtn(1);
@@ -89,7 +89,7 @@ public class ApplicationService {
             log.setOperator(admin.getUsername());
             log.setPrice(0);
             log.setTime(now);
-            restTemplate.put("http://localhost:9099/api/logger/log", log);
+            restTemplate.put("http://logger-service:9094/api/logger/log", log);
             // 删除
             applicationRepository.deleteApplicationByUsername(username);
             map.setRtn(1);

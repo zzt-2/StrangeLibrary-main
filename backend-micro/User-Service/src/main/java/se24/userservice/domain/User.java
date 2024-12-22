@@ -1,19 +1,17 @@
 package se24.userservice.domain;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.Data;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.Table;
 import javax.persistence.Id;
 import java.util.Date;
 
 @Entity
-@Getter
-@Setter
-@ToString
+@Data
+@Table(name = "user_table")
 public class User {
     @Id
     @Column(length = 20)

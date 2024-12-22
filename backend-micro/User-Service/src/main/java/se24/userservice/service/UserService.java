@@ -84,7 +84,7 @@ public class UserService {
         } catch (WrongUserNameException e) {
 //            e.printStackTrace();
             map.setRtn(0);
-            map.setMessage("请使用有效的复旦大学学工号进行注册");
+            map.setMessage("请使用有效的学工号进行注册");
             return map;
         }
         return doCaptcha(username);
@@ -103,7 +103,7 @@ public class UserService {
                 "提示：如果这不是您申请发送的验证码，请无视本邮件，且不要泄露验证码。";
         request.setContent(text);
         // 调用mail服务发送邮件
-        ResponseEntity<HashMap> responseEntity = restTemplate.postForEntity("http://localhost:9080/api/mail/send", request, HashMap.class);
+        ResponseEntity<HashMap> responseEntity = restTemplate.postForEntity("http://mail-service:9080/api/mail/send", request, HashMap.class);
         // 这里的hashmap来自上面调用的接口，便于转发失败信息
         HashMap<String, Object> repMap = responseEntity.getBody();
         ReturnMap map = new ReturnMap();

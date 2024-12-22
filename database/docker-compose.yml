@@ -1,4 +1,4 @@
-version: '3'
+version: "3"
 services:
   mysql:
     container_name: mysql
@@ -7,7 +7,7 @@ services:
     ports:
       - 3306:3306
     expose:
-      - '3306'
+      - "3306"
     environment:
       TZ: Asia/Shanghai
-      MYSQL_ROOT_PASSWORD: password
+      MYSQL_ROOT_password: ${DB_PASSWORD:password}

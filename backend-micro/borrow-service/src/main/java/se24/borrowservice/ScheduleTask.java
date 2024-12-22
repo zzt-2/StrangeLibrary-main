@@ -37,7 +37,7 @@ public class ScheduleTask {
             reserveOverdue.setBookName(borrow.getTitle());
             reserveOverdue.setCopyId(borrow.getCopyId());
             reserveOverdue.setUsername(borrow.getBorrower());
-            restTemplate.put("http://localhost:9094/api/overdue/add", reserveOverdue);
+            restTemplate.put("http://violation-service:9094/api/overdue/add", reserveOverdue);
             // 留下系统记录
             Log log = new Log();
             log.setTitle(borrow.getTitle());
@@ -46,11 +46,11 @@ public class ScheduleTask {
             log.setCategory("预约逾期自动归还");
             log.setNote("信用积分-10");
             log.setTime(now);
-            restTemplate.put("http://localhost:9099/api/logger/log", log);
+            restTemplate.put("http://logger-service:9094/api/logger/log", log);
             // 扣信用分
-            restTemplate.put("http://localhost:9090/api/credit/" + borrow.getBorrower() + "/" + "-10", null);
+            restTemplate.put("http://user-service:9090/api/credit/" + borrow.getBorrower() + "/" + "-10", null);
             // 归还每本书
-            restTemplate.put("http://localhost:9091/api/book/copy/" + borrow.getCopyId() + "/" + "在库", null);
+            restTemplate.put("http://book-service:9091/api/book/copy/" + borrow.getCopyId() + "/" + "在库", null);
         }
         // 本服务中取消预约
         borrowRepository.deleteAll(borrows);

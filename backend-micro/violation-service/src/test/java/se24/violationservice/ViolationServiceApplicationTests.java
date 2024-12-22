@@ -103,11 +103,11 @@ class ViolationServiceApplicationTests {
         ResponseEntity<HashMap> responseEntity = ResponseEntity.ok(hashMap);
 
 
-        Mockito.when(restTemplate.getForObject("http://localhost:9092/api/borrow/getOverdue", Borrow[].class))
+        Mockito.when(restTemplate.getForObject("http://borrow-service:9092/api/borrow/getOverdue", Borrow[].class))
                 .thenReturn(borrows);
         Mockito.when(overdueRepository.findAll()).thenReturn(overdueList);
         Mockito.when(fineRepository.findAll()).thenReturn(fineRecordList);
-        Mockito.when(restTemplate.postForEntity("http://localhost:9080/api/mail/send", new SendMailRequest(), HashMap.class))
+        Mockito.when(restTemplate.postForEntity("http://mail-service:9080/api/mail/send", new SendMailRequest(), HashMap.class))
                 .thenReturn(responseEntity);
 
         HashMap<String, Object> map = broadcastService.broadcast().getMap();

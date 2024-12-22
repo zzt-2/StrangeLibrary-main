@@ -33,7 +33,7 @@ public class DiscussionService {
         User user = null;
         try {
             // 接口调用失败和session找不到目标的结果都是返回null给admin赋值
-            ResponseEntity<User> responseEntity = restTemplate.postForEntity("http://localhost:9090/api/session/" + session, null, User.class);
+            ResponseEntity<User> responseEntity = restTemplate.postForEntity("http://user-service:9090/api/session/" + session, null, User.class);
             user = responseEntity.getBody();
         } catch (Exception e) {
             System.out.println(e.getMessage());
@@ -80,7 +80,7 @@ public class DiscussionService {
         log.setPrice(0);
         log.setCategory("发布讨论");
         log.setUsername(user.getUsername());
-        restTemplate.put("http://localhost:9099/api/logger/log", log);
+        restTemplate.put("http://logger-service:9094/api/logger/log", log);
 
         ReturnMap map = new ReturnMap();
         map.setRtn(1);
@@ -114,7 +114,7 @@ public class DiscussionService {
         log.setPrice(0);
         log.setTime(now);
         log.setNote("讨论内容:" + discussion.getContent());
-        restTemplate.put("http://localhost:9099/api/logger/log", log);
+        restTemplate.put("http://logger-service:9094/api/logger/log", log);
         map.setMessage("讨论删除成功");
         map.setRtn(1);
         return map;

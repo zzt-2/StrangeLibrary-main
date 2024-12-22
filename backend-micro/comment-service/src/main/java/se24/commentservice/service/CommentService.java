@@ -31,7 +31,7 @@ public class CommentService {
         User user = null;
         try {
             // 接口调用失败和session找不到目标的结果都是返回null给admin赋值
-            ResponseEntity<User> responseEntity = restTemplate.postForEntity("http://localhost:9090/api/session/" + session, null, User.class);
+            ResponseEntity<User> responseEntity = restTemplate.postForEntity("http://user-service:9090/api/session/" + session, null, User.class);
             user = responseEntity.getBody();
         } catch (Exception e) {
             System.out.println(e.getMessage());
@@ -100,7 +100,7 @@ public class CommentService {
         log.setTime(now);
         log.setNote("评论标题:" + comment.getTitle());
         map.setRtn(0);
-        restTemplate.put("http://localhost:9099/api/logger/log", log);
+        restTemplate.put("http://logger-service:9094/api/logger/log", log);
 
         map.setRtn(1);
         map.setMessage("删除评论成功！");
@@ -136,7 +136,7 @@ public class CommentService {
         log.setTime(now);
         log.setNote("评论标题:" + comment.getTitle());
         map.setRtn(0);
-        restTemplate.put("http://localhost:9099/api/logger/log", log);
+        restTemplate.put("http://logger-service:9094/api/logger/log", log);
         map.setRtn(1);
         map.setMessage("隐藏评论成功！");
         return map;
@@ -170,7 +170,7 @@ public class CommentService {
         log.setTime(now);
         log.setNote("评论标题:" + comment.getTitle());
         map.setRtn(0);
-        restTemplate.put("http://localhost:9099/api/logger/log", log);
+        restTemplate.put("http://logger-service:9094/api/logger/log", log);
         map.setRtn(1);
         map.setMessage("恢复评论成功！");
         return map;
@@ -195,7 +195,7 @@ public class CommentService {
         log.setPrice(0);
         log.setTime(now);
         log.setNote("评论标题:" + comment.getTitle());
-        restTemplate.put("http://localhost:9099/api/logger/log", log);
+        restTemplate.put("http://logger-service:9094/api/logger/log", log);
         map.setRtn(1);
         map.setMessage("评论成功");
         return map;

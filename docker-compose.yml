@@ -1,190 +1,202 @@
-version: '3'
+version: "3"
 networks:
   service:
-  
+
 services:
-  mysql:
+  db:
+    privileged: true
     networks:
       - service
-    container_name: mysql
-    build: database/
+    image: enmotech/opengauss-lite:latest
     restart: always
+    volumes:
+      - ./database/:/var/lib/opengauss
+      - ./core/:/core
     ports:
-      - 3306:3306
-    expose:
-      - '3306'
+      - 5432:5432
     environment:
       TZ: Asia/Shanghai
-      MYSQL_ROOT_PASSWORD: password
+      GS_PASSWORD: Password123@@
+      GS_USER: gaussdb
+      CORE_PATTERN: /core/core-%e-%p-%t
 
   service-discovery:
     networks:
       - service
     container_name: service-discovery
-    restart: always                     
+    restart: always
     build: ./backend-micro/service-discovery
     depends_on:
-      - mysql
+      - db
     environment:
       TZ: Asia/Shanghai
-      USERNAME: root
-      PASSWORD: password
-      DB_URL: ${DB_URL:-mysql}:3306/book
+      username: gaussdb
+      DB_PASSWORD: ${DB_PASSWORD:-password}
+      DB_URL: ${DB_URL:-db}:5432/book
       EUREKA_HOST: ${EUREKA_HOST:-service-discovery}
-    volumes:                           
-      - ./logs/:/app/log                
-    ports:                              
+    volumes:
+      - ./logs/:/app/log
+      - ./application-prod.yml:/app/application.yml
+    ports:
       - "8080:8080"
-      
+
   user-service:
     networks:
       - service
-    container_name: user-service 
-    restart: always                     
-    build: ./backend-micro/user-service 
+    container_name: user-service
+    restart: always
+    build: ./backend-micro/user-service
     depends_on:
-      - mysql
-      - service-discovery 
+      - db
+      - service-discovery
     environment:
       TZ: Asia/Shanghai
-      USERNAME: root
-      PASSWORD: password
-      DB_URL: ${DB_URL:-mysql}:3306/book
-    volumes:                           
-      - ./logs/:/app/log                
-    ports:                              
+      username: gaussdb
+      DB_PASSWORD: ${DB_PASSWORD:-password}
+      DB_URL: ${DB_URL:-db}:5432/book
+    volumes:
+      - ./logs/:/app/log
+      - ./application-prod.yml:/app/application.yml
+    ports:
       - "9090:9090"
-      
+
   book-service:
     networks:
       - service
     container_name: book-service
-    restart: always                     
+    restart: always
     build: ./backend-micro/book-service
     depends_on:
-      - mysql
-      - service-discovery 
+      - db
+      - service-discovery
     environment:
       TZ: Asia/Shanghai
-      USERNAME: root
-      PASSWORD: password
-      DB_URL: ${DB_URL:-mysql}:3306/book
+      username: gaussdb
+      DB_PASSWORD: ${DB_PASSWORD:-password}
+      DB_URL: ${DB_URL:-db}:5432/book
       EUREKA_HOST: ${EUREKA_HOST:-service-discovery}
-    volumes:                           
-      - ./logs/:/app/log                
-    ports:                              
-      - "9091:9091" 
- 
+    volumes:
+      - ./logs/:/app/log
+      - ./application-prod.yml:/app/application.yml
+    ports:
+      - "9091:9091"
+
   mail-service:
     networks:
       - service
     container_name: mail-service
-    restart: always                     
+    restart: always
     build: ./backend-micro/mail-service
     depends_on:
-      - mysql
-      - service-discovery 
+      - db
+      - service-discovery
     environment:
       TZ: Asia/Shanghai
-      DB_USERNAME: root
-      DB_PASSWORD: password
-      DB_URL: ${DB_URL:-mysql}:3306/book
+      DB_username: gaussdb
+      DB_PASSWORD: ${DB_PASSWORD:-password}
+      DB_URL: ${DB_URL:-db}:5432/book
       EUREKA_HOST: ${EUREKA_HOST:-service-discovery}
-    volumes:                           
-      - ./logs/:/app/log                
-    ports:                              
-      - "9080:9080" 
+    volumes:
+      - ./logs/:/app/log
+      - ./application-prod.yml:/app/application.yml
+    ports:
+      - "9080:9080"
 
   borrow-service:
     networks:
       - service
     container_name: borrow-service
-    restart: always                     
+    restart: always
     build: ./backend-micro/borrow-service
     depends_on:
-      - mysql
-      - service-discovery 
+      - db
+      - service-discovery
     environment:
       TZ: Asia/Shanghai
-      USERNAME: root
-      PASSWORD: password
-      DB_URL: ${DB_URL:-mysql}:3306/book
+      username: gaussdb
+      DB_PASSWORD: ${DB_PASSWORD:-password}
+      DB_URL: ${DB_URL:-db}:5432/book
       EUREKA_HOST: ${EUREKA_HOST:-service-discovery}
-    volumes:                           
-      - ./logs/:/app/log                
-    ports:                              
-      - "9092:9092" 
+    volumes:
+      - ./logs/:/app/log
+      - ./application-prod.yml:/app/application.yml
+    ports:
+      - "9092:9092"
 
   comment-service:
     networks:
       - service
     container_name: comment-service
-    restart: always                     
+    restart: always
     build: ./backend-micro/comment-service
     depends_on:
-      - mysql
-      - service-discovery 
+      - db
+      - service-discovery
     environment:
       TZ: Asia/Shanghai
-      USERNAME: root
-      PASSWORD: password
-      DB_URL: ${DB_URL:-mysql}:3306/book
+      username: gaussdb
+      DB_PASSWORD: ${DB_PASSWORD:-password}
+      DB_URL: ${DB_URL:-db}:5432/book
       EUREKA_HOST: ${EUREKA_HOST:-service-discovery}
-    volumes:                           
-      - ./logs/:/app/log                
-    ports:                              
-      - "9093:9093" 
+    volumes:
+      - ./logs/:/app/log
+      - ./application-prod.yml:/app/application.yml
+    ports:
+      - "9093:9093"
 
   logger-service:
     networks:
       - service
     container_name: logger-service
-    restart: always                     
+    restart: always
     build: ./backend-micro/logger-service
     depends_on:
-      - mysql
-      - service-discovery 
+      - db
+      - service-discovery
     environment:
       TZ: Asia/Shanghai
-      USERNAME: root
-      PASSWORD: password
-      DB_URL: ${DB_URL:-mysql}:3306/book
+      username: gaussdb
+      DB_PASSWORD: ${DB_PASSWORD:-password}
+      DB_URL: ${DB_URL:-db}:5432/book
       EUREKA_HOST: ${EUREKA_HOST:-service-discovery}
-    volumes:                           
+    volumes:
       - ./logs/:/app/log
-      - ./application-test-logger.yml:/app/application.yml
-    ports:                              
-      - "9099:9099" 
+      - ./application-prod.yml:/app/application.yml
+    ports:
+      - "9099:9099"
 
   violation-service:
     networks:
       - service
     container_name: violation-service
-    restart: always                     
+    restart: always
     build: ./backend-micro/violation-service
     depends_on:
-      - mysql
-      - service-discovery 
+      - db
+      - service-discovery
     environment:
       TZ: Asia/Shanghai
-      USERNAME: root
-      PASSWORD: password
-      DB_URL: ${DB_URL:-mysql}:3306/book
+      username: gaussdb
+      DB_PASSWORD: ${DB_PASSWORD:-password}
+      DB_URL: ${DB_URL:-db}:5432/book
       EUREKA_HOST: ${EUREKA_HOST:-service-discovery}
-    volumes:                           
-      - ./logs/:/app/log                
-    ports:                              
-      - "9094:9094" 
+    volumes:
+      - ./logs/:/app/log
+      - ./application-prod.yml:/app/application.yml
+    ports:
+      - "9094:9094"
 
   se-frontend-server:
     networks:
-      - service                              
-    container_name: se-frontend-server   
-    restart: always                     
+      - service
+    container_name: se-frontend-server
+    restart: always
     build: ./frontend
     environment:
       TZ: Asia/Shanghai
-      USERNAME: root
-      PASSWORD: password
+      username: gaussdb
+      DB_PASSWORD: ${DB_PASSWORD:-password}
     ports:
-      - "80:80"                      
+      - "80:80"
+    expose:
+      - "80"

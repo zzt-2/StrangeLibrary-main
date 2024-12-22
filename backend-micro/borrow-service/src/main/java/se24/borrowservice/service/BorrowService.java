@@ -35,7 +35,7 @@ public class BorrowService {
         String identity = "";
         try {
             // 接口调用失败和session找不到目标的结果都是返回null给admin赋值
-            ResponseEntity<String> responseEntity = restTemplate.getForEntity("http://localhost:9090/api/identity/" + username, String.class);
+            ResponseEntity<String> responseEntity = restTemplate.getForEntity("http://user-service:9090/api/identity/" + username, String.class);
             identity = responseEntity.getBody();
         } catch (Exception e) {
             System.out.println(e.getMessage());
@@ -48,7 +48,7 @@ public class BorrowService {
         Integer credit = 0;
         try {
             // 接口调用失败和session找不到目标的结果都是返回null给admin赋值
-            ResponseEntity<Integer> responseEntity = restTemplate.getForEntity("http://localhost:9090/api/credit/" + username, Integer.class);
+            ResponseEntity<Integer> responseEntity = restTemplate.getForEntity("http://user-service:9090/api/credit/" + username, Integer.class);
             credit = responseEntity.getBody();
         } catch (Exception e) {
             System.out.println(e.getMessage());
@@ -61,7 +61,7 @@ public class BorrowService {
         User user = null;
         try {
             // 接口调用失败和session找不到目标的结果都是返回null给admin赋值
-            ResponseEntity<User> responseEntity = restTemplate.postForEntity("http://localhost:9090/api/session/" + session, null, User.class);
+            ResponseEntity<User> responseEntity = restTemplate.postForEntity("http://user-service:9090/api/session/" + session, null, User.class);
             user = responseEntity.getBody();
         } catch (Exception e) {
             System.out.println(e.getMessage());
@@ -74,7 +74,7 @@ public class BorrowService {
         Copy copy = null;
         try {
             // 接口调用失败和session找不到目标的结果都是返回null给admin赋值
-            ResponseEntity<Copy> responseEntity = restTemplate.getForEntity("http://localhost:9091/api/book/copy/" + copyId, Copy.class);
+            ResponseEntity<Copy> responseEntity = restTemplate.getForEntity("http://book-service:9091/api/book/copy/" + copyId, Copy.class);
             copy = responseEntity.getBody();
         } catch (Exception e) {
             System.out.println(e.getMessage());
@@ -171,7 +171,7 @@ public class BorrowService {
         copy.setStatus("借出");
         copy.setBorrower(borrower);
         try {
-            restTemplate.put("http://localhost:9091/api/book/copy", copy);
+            restTemplate.put("http://book-service:9091/api/book/copy", copy);
             // 本地生成新的借出
             Borrow borrow = new Borrow();
             borrow.setCopyId(copy.getCopyId());
@@ -192,7 +192,7 @@ public class BorrowService {
             log.setPrice(0);
             log.setTime(now.getDate());
             log.setTimeValid(timeValid);
-            restTemplate.put("http://localhost:9099/api/logger/log", log);
+            restTemplate.put("http://logger-service:9094/api/logger/log", log);
             map.setRtn(1);
             map.setMessage("借书成功");
         } catch (Exception e) {
@@ -264,18 +264,18 @@ public class BorrowService {
         copy.setBranch(request.getBranch());
         try {
             // 接口调用失败和session找不到目标的结果都是返回null给admin赋值
-            restTemplate.put("http://localhost:9091/api/book/copy", copy);
+            restTemplate.put("http://book-service:9091/api/book/copy", copy);
 
             // 生成一条待评评论
             Comment comment = new Comment();
             comment.setUsername(borrower);
             comment.setIsbn(copy.getISBN());
             comment.setBookName(copy.getTitle());
-            restTemplate.put("http://localhost:9093/api/comment/add", comment);
+            restTemplate.put("http://comment-service:9093/api/comment/add", comment);
 
             // 生成罚款
             // 经过前面的检测，这里一定能获取到的
-            double price = restTemplate.getForObject("http://localhost:9091/api/book/price/" + copy.getISBN(), Double.class);
+            double price = restTemplate.getForObject("http://book-service:9091/api/book/price/" + copy.getISBN(), Double.class);
             Borrow borrow = borrowRepository.findBorrowByCopyId(copy.getCopyId());
             boolean needFine = false;
             double finePrice = 0;
@@ -329,11 +329,11 @@ public class BorrowService {
                 fine.setReason(fineCategory);
                 fine.setUsername(borrower);
                 fine.setBookName(copy.getTitle());
-                restTemplate.put("http://localhost:9094/api/fine/add", fine);
+                restTemplate.put("http://violation-service:9094/api/fine/add", fine);
                 // 扣信用分
-                restTemplate.put("http://localhost:9090/api/credit/" + borrower + "/" + creditChange, null);
+                restTemplate.put("http://user-service:9090/api/credit/" + borrower + "/" + creditChange, null);
             }
-            restTemplate.put("http://localhost:9099/api/logger/log", log);
+            restTemplate.put("http://logger-service:9094/api/logger/log", log);
 
             // 还书之后本服务保存的Borrow就应该删除了
             borrowRepository.deleteBorrowByCopyId(request.getCopyId());
@@ -424,7 +424,7 @@ public class BorrowService {
         copy.setStatus("预约");
         copy.setBorrower(borrower);
         try {
-            restTemplate.put("http://localhost:9091/api/book/copy", copy);
+            restTemplate.put("http://book-service:9091/api/book/copy", copy);
             // 本地生成新的预约
             Borrow borrow = new Borrow();
             borrow.setCopyId(copy.getCopyId());
@@ -443,7 +443,7 @@ public class BorrowService {
             log.setPrice(0);
             log.setTime(now.getDate());
             log.setTimeValid(timeValid);
-            restTemplate.put("http://localhost:9099/api/logger/log", log);
+            restTemplate.put("http://logger-service:9094/api/logger/log", log);
             map.setRtn(1);
             map.setMessage("预约成功");
         } catch (Exception e) {
@@ -529,7 +529,7 @@ public class BorrowService {
         copy.setStatus("借出");
         copy.setBorrower(borrower);
         try {
-            restTemplate.put("http://localhost:9091/api/book/copy", copy);
+            restTemplate.put("http://book-service:9091/api/book/copy", copy);
             // 更新本服务预约记录为借出状态
             Borrow borrow = borrowRepository.findBorrowByCopyId(copy.getCopyId());
             borrow.setStatus("借出");
@@ -547,7 +547,7 @@ public class BorrowService {
             log.setPrice(0);
             log.setTime(now.getDate());
             log.setTimeValid(timeValid);
-            restTemplate.put("http://localhost:9099/api/logger/log", log);
+            restTemplate.put("http://logger-service:9094/api/logger/log", log);
             map.setRtn(1);
             map.setMessage("取预约成功");
         } catch (Exception e) {

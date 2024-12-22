@@ -78,7 +78,7 @@ public class BroadcastService {
         HashMap<String, String> mailMap = new HashMap<>();
 
         // 遍历逾期预约数据库、已外借书本、已生成罚金，按用户统计并发送邮件
-        Borrow[] borrows = restTemplate.getForObject("http://localhost:9092/api/borrow/getOverdue", Borrow[].class);
+        Borrow[] borrows = restTemplate.getForObject("http://borrow-service:9092/api/borrow/getOverdue", Borrow[].class);
         if (borrows==null){borrows=new Borrow[0];}
         List<Borrow> borrowList= Arrays.asList(borrows);
         List<ReserveOverdue> overdueList = overdueRepository.findAll();
@@ -97,7 +97,7 @@ public class BroadcastService {
             request.setContent(text);
             try {
                 System.out.println("尝试发送邮件到：" + username + "@fudan.edu.cn");
-                ResponseEntity<HashMap> responseEntity = restTemplate.postForEntity("http://localhost:9080/api/mail/send", request, HashMap.class);
+                ResponseEntity<HashMap> responseEntity = restTemplate.postForEntity("http://mail-service:9080/api/mail/send", request, HashMap.class);
                 HashMap<String, Object> repMap = responseEntity.getBody();
                 map.setMap(repMap);
             } catch (Exception e) {

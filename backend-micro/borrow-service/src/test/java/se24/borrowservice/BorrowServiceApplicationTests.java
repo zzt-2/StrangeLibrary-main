@@ -59,7 +59,7 @@ class BorrowServiceApplicationTests {
         user.setPermission("");
         user.setUsername(mockUsername);
         ResponseEntity<User> responseEntity = ResponseEntity.ok(user);
-        Mockito.when(restTemplate.postForEntity("http://localhost:9090/api/session/" + mockSession, null, User.class))
+        Mockito.when(restTemplate.postForEntity("http://user-service:9090/api/session/" + mockSession, null, User.class))
                 .thenReturn(responseEntity);
         HashMap<String, Object> map = borrowService.borrow(request).getMap();
         assertEquals("借书需要管理员权限",map.get("message"));
@@ -77,7 +77,7 @@ class BorrowServiceApplicationTests {
         user.setUsername(mockUsername);
         ResponseEntity<User> responseEntity = ResponseEntity.ok(user);
 
-        Mockito.when(restTemplate.postForEntity("http://localhost:9090/api/session/" + mockSession, null, User.class))
+        Mockito.when(restTemplate.postForEntity("http://user-service:9090/api/session/" + mockSession, null, User.class))
                 .thenReturn(responseEntity);
         Mockito.when(borrowRepository.existsByCopyId(mockCopyId)).thenReturn(true); //书本在外
 
@@ -105,10 +105,10 @@ class BorrowServiceApplicationTests {
         ResponseEntity<Copy> responseEntity1 = ResponseEntity.ok(copy);
 
 
-        Mockito.when(restTemplate.postForEntity("http://localhost:9090/api/session/" + mockSession, null, User.class))
+        Mockito.when(restTemplate.postForEntity("http://user-service:9090/api/session/" + mockSession, null, User.class))
                 .thenReturn(responseEntity);
         Mockito.when(borrowRepository.existsByCopyId(mockCopyId)).thenReturn(true); //书本在外
-        Mockito.when(restTemplate.getForEntity("http://localhost:9091/api/book/copy/" + mockCopyId, Copy.class))
+        Mockito.when(restTemplate.getForEntity("http://book-service:9091/api/book/copy/" + mockCopyId, Copy.class))
                 .thenReturn(responseEntity1);
 
 
@@ -141,12 +141,12 @@ class BorrowServiceApplicationTests {
 
         Rule rule = null;
 
-        Mockito.when(restTemplate.postForEntity("http://localhost:9090/api/session/" + mockSession, null, User.class))
+        Mockito.when(restTemplate.postForEntity("http://user-service:9090/api/session/" + mockSession, null, User.class))
                 .thenReturn(responseEntity);
         Mockito.when(borrowRepository.existsByCopyId(mockCopyId)).thenReturn(false); //书本没被借出
-        Mockito.when(restTemplate.getForEntity("http://localhost:9091/api/book/copy/" + mockCopyId, Copy.class))
+        Mockito.when(restTemplate.getForEntity("http://book-service:9091/api/book/copy/" + mockCopyId, Copy.class))
                 .thenReturn(responseEntity1);
-        Mockito.when(restTemplate.getForEntity("http://localhost:9090/api/identity/" + mockUsername, String.class))
+        Mockito.when(restTemplate.getForEntity("http://user-service:9090/api/identity/" + mockUsername, String.class))
                 .thenReturn(responseEntity2);
         Mockito.when(ruleRepository.findRuleByIdentity(mockIdentity)).thenReturn(rule);
 
@@ -182,12 +182,12 @@ class BorrowServiceApplicationTests {
         rule.setBorrowMaxNum(3);
 
 
-        Mockito.when(restTemplate.postForEntity("http://localhost:9090/api/session/" + mockSession, null, User.class))
+        Mockito.when(restTemplate.postForEntity("http://user-service:9090/api/session/" + mockSession, null, User.class))
                 .thenReturn(responseEntity);
         Mockito.when(borrowRepository.existsByCopyId(mockCopyId)).thenReturn(false); //书本没被借出
-        Mockito.when(restTemplate.getForEntity("http://localhost:9091/api/book/copy/" + mockCopyId, Copy.class))
+        Mockito.when(restTemplate.getForEntity("http://book-service:9091/api/book/copy/" + mockCopyId, Copy.class))
                 .thenReturn(responseEntity1);
-        Mockito.when(restTemplate.getForEntity("http://localhost:9090/api/identity/" + mockUsername, String.class))
+        Mockito.when(restTemplate.getForEntity("http://user-service:9090/api/identity/" + mockUsername, String.class))
                 .thenReturn(responseEntity2);
         Mockito.when(ruleRepository.findRuleByIdentity(mockIdentity)).thenReturn(rule);
         Mockito.when(borrowRepository.countByBorrower(request.getBorrower())).thenReturn(4);
@@ -226,12 +226,12 @@ class BorrowServiceApplicationTests {
         rule.setBorrowMaxNum(5);
 
 
-        Mockito.when(restTemplate.postForEntity("http://localhost:9090/api/session/" + mockSession, null, User.class))
+        Mockito.when(restTemplate.postForEntity("http://user-service:9090/api/session/" + mockSession, null, User.class))
                 .thenReturn(responseEntity);
         Mockito.when(borrowRepository.existsByCopyId(mockCopyId)).thenReturn(false); //书本没被借出
-        Mockito.when(restTemplate.getForEntity("http://localhost:9091/api/book/copy/" + mockCopyId, Copy.class))
+        Mockito.when(restTemplate.getForEntity("http://book-service:9091/api/book/copy/" + mockCopyId, Copy.class))
                 .thenReturn(responseEntity1);
-        Mockito.when(restTemplate.getForEntity("http://localhost:9090/api/identity/" + mockUsername, String.class))
+        Mockito.when(restTemplate.getForEntity("http://user-service:9090/api/identity/" + mockUsername, String.class))
                 .thenReturn(responseEntity2);
         Mockito.when(ruleRepository.findRuleByIdentity(mockIdentity)).thenReturn(rule);
         Mockito.when(borrowRepository.countByBorrower(request.getBorrower())).thenReturn(4);
@@ -272,16 +272,16 @@ class BorrowServiceApplicationTests {
 
         ResponseEntity<Integer> responseEntity3 = ResponseEntity.ok(0);//信用分为0
 
-        Mockito.when(restTemplate.postForEntity("http://localhost:9090/api/session/" + mockSession, null, User.class))
+        Mockito.when(restTemplate.postForEntity("http://user-service:9090/api/session/" + mockSession, null, User.class))
                 .thenReturn(responseEntity);
         Mockito.when(borrowRepository.existsByCopyId(mockCopyId)).thenReturn(false); //书本没被借出
-        Mockito.when(restTemplate.getForEntity("http://localhost:9091/api/book/copy/" + mockCopyId, Copy.class))
+        Mockito.when(restTemplate.getForEntity("http://book-service:9091/api/book/copy/" + mockCopyId, Copy.class))
                 .thenReturn(responseEntity1);
-        Mockito.when(restTemplate.getForEntity("http://localhost:9090/api/identity/" + mockUsername, String.class))
+        Mockito.when(restTemplate.getForEntity("http://user-service:9090/api/identity/" + mockUsername, String.class))
                 .thenReturn(responseEntity2);
         Mockito.when(ruleRepository.findRuleByIdentity(mockIdentity)).thenReturn(rule);
         Mockito.when(borrowRepository.countByBorrower(request.getBorrower())).thenReturn(4);
-        Mockito.when(restTemplate.getForEntity("http://localhost:9090/api/credit/" + mockUsername, Integer.class))
+        Mockito.when(restTemplate.getForEntity("http://user-service:9090/api/credit/" + mockUsername, Integer.class))
                 .thenReturn(responseEntity3);
 
 
@@ -320,16 +320,16 @@ class BorrowServiceApplicationTests {
 
         ResponseEntity<Integer> responseEntity3 = ResponseEntity.ok(100);//信用分为100
 
-        Mockito.when(restTemplate.postForEntity("http://localhost:9090/api/session/" + mockSession, null, User.class))
+        Mockito.when(restTemplate.postForEntity("http://user-service:9090/api/session/" + mockSession, null, User.class))
                 .thenReturn(responseEntity);
         Mockito.when(borrowRepository.existsByCopyId(mockCopyId)).thenReturn(false); //书本没被借出
-        Mockito.when(restTemplate.getForEntity("http://localhost:9091/api/book/copy/" + mockCopyId, Copy.class))
+        Mockito.when(restTemplate.getForEntity("http://book-service:9091/api/book/copy/" + mockCopyId, Copy.class))
                 .thenReturn(responseEntity1);
-        Mockito.when(restTemplate.getForEntity("http://localhost:9090/api/identity/" + mockUsername, String.class))
+        Mockito.when(restTemplate.getForEntity("http://user-service:9090/api/identity/" + mockUsername, String.class))
                 .thenReturn(responseEntity2);
         Mockito.when(ruleRepository.findRuleByIdentity(mockIdentity)).thenReturn(rule);
         Mockito.when(borrowRepository.countByBorrower(request.getBorrower())).thenReturn(4);
-        Mockito.when(restTemplate.getForEntity("http://localhost:9090/api/credit/" + mockUsername, Integer.class))
+        Mockito.when(restTemplate.getForEntity("http://user-service:9090/api/credit/" + mockUsername, Integer.class))
                 .thenReturn(responseEntity3);
 
 
@@ -370,13 +370,13 @@ class BorrowServiceApplicationTests {
         borrow.setValidTime(new Date());
 
 
-        Mockito.when(restTemplate.postForEntity("http://localhost:9090/api/session/" + mockSession, null, User.class))
+        Mockito.when(restTemplate.postForEntity("http://user-service:9090/api/session/" + mockSession, null, User.class))
                 .thenReturn(responseEntity);
         Mockito.when(borrowRepository.existsByCopyIdAndStatus(mockCopyId, "借出"))
                 .thenReturn(true);//借出状态
-        Mockito.when(restTemplate.getForEntity("http://localhost:9091/api/book/copy/" + mockCopyId, Copy.class))
+        Mockito.when(restTemplate.getForEntity("http://book-service:9091/api/book/copy/" + mockCopyId, Copy.class))
                 .thenReturn(responseEntity1);
-        Mockito.when(restTemplate.getForObject("http://localhost:9091/api/book/price/" + copy.getISBN(), Double.class))
+        Mockito.when(restTemplate.getForObject("http://book-service:9091/api/book/price/" + copy.getISBN(), Double.class))
                 .thenReturn(40.00);
         Mockito.when(borrowRepository.findBorrowByCopyId(copy.getCopyId())).thenReturn(borrow);
 
@@ -416,16 +416,16 @@ class BorrowServiceApplicationTests {
         rule.setBorrowMaxNum(5);
         rule.setReserveValidTime(100);
 
-        Mockito.when(restTemplate.postForEntity("http://localhost:9090/api/session/" + mockSession, null, User.class))
+        Mockito.when(restTemplate.postForEntity("http://user-service:9090/api/session/" + mockSession, null, User.class))
                 .thenReturn(responseEntity);
         Mockito.when(borrowRepository.existsByCopyId(mockCopyId)).thenReturn(false); //书本没被借出
-        Mockito.when(restTemplate.getForEntity("http://localhost:9091/api/book/copy/" + mockCopyId, Copy.class))
+        Mockito.when(restTemplate.getForEntity("http://book-service:9091/api/book/copy/" + mockCopyId, Copy.class))
                 .thenReturn(responseEntity1);
-        Mockito.when(restTemplate.getForEntity("http://localhost:9090/api/identity/" + mockUsername, String.class))
+        Mockito.when(restTemplate.getForEntity("http://user-service:9090/api/identity/" + mockUsername, String.class))
                 .thenReturn(responseEntity2);
         Mockito.when(ruleRepository.findRuleByIdentity(mockIdentity)).thenReturn(rule);
         Mockito.when(borrowRepository.countByBorrower(user.getUsername())).thenReturn(4);
-        Mockito.when(restTemplate.getForEntity("http://localhost:9090/api/credit/" + mockUsername, Integer.class))
+        Mockito.when(restTemplate.getForEntity("http://user-service:9090/api/credit/" + mockUsername, Integer.class))
                 .thenReturn(responseEntity3);
 
         HashMap<String, Object> map = borrowService.reserve(request).getMap();
@@ -471,16 +471,16 @@ class BorrowServiceApplicationTests {
         borrow.setBorrower(mockUsername);
         borrow.setValidTime(new Date());
 
-        Mockito.when(restTemplate.postForEntity("http://localhost:9090/api/session/" + mockSession, null, User.class))
+        Mockito.when(restTemplate.postForEntity("http://user-service:9090/api/session/" + mockSession, null, User.class))
                 .thenReturn(responseEntity);
         Mockito.when(borrowRepository.existsByCopyIdAndStatus(mockCopyId, "预约")).thenReturn(true); //书本没被借出
-        Mockito.when(restTemplate.getForEntity("http://localhost:9091/api/book/copy/" + mockCopyId, Copy.class))
+        Mockito.when(restTemplate.getForEntity("http://book-service:9091/api/book/copy/" + mockCopyId, Copy.class))
                 .thenReturn(responseEntity1);
-        Mockito.when(restTemplate.getForEntity("http://localhost:9090/api/identity/" + mockUsername, String.class))
+        Mockito.when(restTemplate.getForEntity("http://user-service:9090/api/identity/" + mockUsername, String.class))
                 .thenReturn(responseEntity2);
         Mockito.when(ruleRepository.findRuleByIdentity(mockIdentity)).thenReturn(rule);
         Mockito.when(borrowRepository.findBorrowByCopyId(copy.getCopyId())).thenReturn(borrow);
-        Mockito.when(restTemplate.getForEntity("http://localhost:9090/api/credit/" + mockUsername, Integer.class))
+        Mockito.when(restTemplate.getForEntity("http://user-service:9090/api/credit/" + mockUsername, Integer.class))
                 .thenReturn(responseEntity3);
 
         HashMap<String, Object> map = borrowService.getReserve(request).getMap();
