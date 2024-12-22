@@ -1,0 +1,7 @@
+
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://mysql:3306/book?serverTimezone=Asia/Shanghai # 修改:3306前的mysql为localhost可本地测试
+    username: root
+    password: password
